@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="UKElections">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="H:/eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+              	<property name="srcDir" value="."/>
+              	<condition property="ARCHIVE_DIR" value="${env.ARCHIVE_DIR}" else=".">
+              	        <isset property="env.ARCHIVE_DIR" />
+              	    </condition>
+              		<property name="warname" value= "webStarterApp.war"/>
+    <path id="Web App Libraries.libraryclasspath">
+        <pathelement location="WebContent/WEB-INF/lib/commons-logging-1.1.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/hadoop-core-2.2.0-mr1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/hive-exec-0.12.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/hive-jdbc-0.12.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/hive-metastore-0.12.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/hive-service-0.12.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/hive-shims-0.12.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/httpclient-4.2.5.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/httpcore-4.2.4.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jfreechart.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jstl-1.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/libfb303-0.9.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/libthrift-0.9.0.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/log4j-1.2.17.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/servlet-api.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/slf4j-api-1.6.1.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/slf4j-log4j12-1.6.1.jar"/>
+    </path>
+    <path id="EAR Libraries.libraryclasspath"/>
+    <path id="UKElections.classpath">
+        <pathelement location="build/classes"/>
+        <path refid="Web App Libraries.libraryclasspath"/>
+        <path refid="EAR Libraries.libraryclasspath"/>
+        <pathelement location="WebContent/WEB-INF/lib/jstl-1.2.jar"/>
+        <pathelement location="WebContent/WEB-INF/lib/jfreechart.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="build/classes"/>
+        <copy includeemptydirs="false" todir="build/classes">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="build/classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="build/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="UKElections.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="QueryResultsDAO">
+        <java classname="com.hive.dao.QueryResultsDAO" failonerror="true" fork="yes">
+            <classpath refid="UKElections.classpath"/>
+        </java>
+    </target>
+    <target name="OpinionPolls">
+        <java classname="com.samples.search.OpinionPolls" failonerror="true" fork="yes">
+            <classpath refid="UKElections.classpath"/>
+        </java>
+    </target>
+    <target name="JdConnection">
+        <java classname="com.hive.dao.JdConnection" failonerror="true" fork="yes">
+            <classpath refid="UKElections.classpath"/>
+        </java>
+    </target>
+              	
+              	<target name="build-war" depends="build-project">
+              		  <war destfile="${ARCHIVE_DIR}/${warname}" webxml="WebContent/WEB-INF/web.xml">
+              		  	<webinf dir="WebContent/WEB-INF">
+              		  		<include name="resources"/>
+              		    </webinf>
+              		  	<fileset dir="WebContent">
+              		  		<include name="**/*"/>
+              		    </fileset>
+              		  	<classes dir="bin"/>
+              		  </war>
+              	   </target>
+</project>

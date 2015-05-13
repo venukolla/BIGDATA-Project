@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<head>
+<title>Top Leaders</title>
+<meta HTTP-EQUIV="X-UA-COMPATIBLE" CONTENT="IE=EmulateIE9">
+<script type="text/javascript" src="js/d3.min.js"></script>
+<script src="js/d3.v3.min.js"></script>
+<script type="text/javascript" src="js/radialProgress.js"></script>
+<link type="text/css" rel="stylesheet" href="CSS/styles.css">
+<style>
+body {
+	background: url('images/ukimage.jpg') no-repeat center center fixed;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	margin: 0;
+	padding: 0;
+}
+</style>
+<style>
+#test .arc2 {
+	stroke-weight: 0.1;
+	fill: #3660b0;
+}
+
+#outer {
+	background: #4B088A;
+	border-radius: 5px;
+	color: #000;
+}
+
+#div1, #div2, #div3, #div4 {
+	width: 25%;
+	height: 200px;
+	box-sizing: border-box;
+	float: left;
+}
+
+#div5, #div6, #div7, #div8 {
+	width: 25%;
+	height: 200px;
+	box-sizing: border-box;
+}
+
+#div2 .arc {
+	stroke-weight: 0.1;
+	fill: #f0a417;
+}
+
+#div2 .arc2 {
+	stroke-weight: 0.1;
+	fill: #b00d08;
+}
+
+#div3 .arc {
+	stroke-weight: 0.1;
+	fill: #1d871b;
+}
+
+.selectedRadial {
+	border-radius: 3px;
+	background: #f4f4f4;
+	color: #000;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+	border: 1px solid rgba(200, 200, 200, 0.85);
+}
+
+.radial {
+	border-radius: 3px;
+	background: #3104B4;
+	color: #000;
+}
+</style>
+</head>
+
+<body>
+
+	<div class="header">
+		<table>
+			<tr>
+				<h1 align="center" style="font-size: 40">
+
+					<font face="Agency FB" color="#06041A" size="30">UK
+						Elections-2015</font>
+
+					<marquee>
+						<a href="https://www.conservatives.com/"><img
+							src=images/conservatie.jpeg width="100" height="100"></a> <a
+							href="http://www.mydup.com/"><img src=images/DUP.jpg
+							width="100" height="100"></a> <a
+							href="https://www.greenparty.org.uk/"><img
+							src=images/greenparty.jpg width="100" height="100"></a> <a
+							href="http://www.sinnfein.ie/"><img src=images/SFein.png
+							width="100" height="100"></a> <a href="http://www.ukip.org/"><img
+							src=images/uklabor.jpg width="100" height="100"></a> <a
+							href="http://www.snp.org/"><img src=images/snp.jpg
+							width="100" height="100"></a> <a href="http://www.ukip.org/"><img
+							src=images/ukip.png width="100" height="100"></a> <a
+							href="http://www.libdems.org.uk/"><img
+							src=images/ldemocrats.jpg width="100" height="100"></a>
+					</marquee>
+				</h1>
+			</tr>
+		</table>
+	</div>
+	<div class="container">
+		<div class="row">
+			<table>
+				<tr>
+					<td align="center"><a href="opinionpoll.html"><img src="images/opinion-poll.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="topleader.html"><img src="images/partyleader.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="placestrength.html"><img src="images/placeimage.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="topusers.html"><img src="images/topusers.png" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="countrystrength.html"><img src="images/country.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="langstrength.html"><img src="images/Language.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="index.jsp"><img src="images/refresh.jpg" id="test" width="200" height="175" /></a></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+	<div id='outer'
+		style="width: 1200px; height: 800px; margin: 0px auto; margin-top: 20px; padding: 10px">
+		<div id="main" style="width: 1200px; height: 200px; margin: 0px auto;">
+			<div id="div1"></div>
+			<div id="div2"></div>
+			<div id="div3"></div>
+			<div id="div4"></div>
+		</div>
+		<br /> <br /> <br /> <br />
+		<div id="main2"
+			style="width: 1200px; height: 302px; margin: 0px auto;">
+			<div id="div5" style="float: left;"></div>
+			<div id="div6" style="float: left;"></div>
+			<div id="div7" style="float: right;"></div>
+			<div id="div8" style="float: right;"></div>
+		</div>
+	</div>
+	<script language="JavaScript">
+
+    var div1=d3.select(document.getElementById('div1'));
+    var div2=d3.select(document.getElementById('div2'));
+    var div3=d3.select(document.getElementById('div3'));
+    var div4=d3.select(document.getElementById('div4'));
+    var div5=d3.select(document.getElementById('div5'));
+    var div6=d3.select(document.getElementById('div6'));
+    var div7=d3.select(document.getElementById('div7'));
+    var div8=d3.select(document.getElementById('div8'));
+	var rows;
+	var total;
+	
+    d3.csv("csv/partyleader.csv", function(data) {
+  	
+    	rows = data;
+        total = rows[8].Count;
+        console.log(total);
+		var x=rows[0].Leader;
+		var c=rows[0].Count;
+		var v=(c/total)*100;
+    	var rp1 = radialProgress(document.getElementById('div1'))
+                .label(x+"\t"+c)
+                .diameter(200)
+                .value(v)
+                .render();
+
+        var rp2 = radialProgress(document.getElementById('div2'))
+                .label(rows[1].Leader+"\t"+rows[1].Count)
+                .diameter(200)
+                .value((rows[1].Count/total)*100)
+                .render();
+
+        var rp3 = radialProgress(document.getElementById('div3'))
+                .label(rows[2].Leader+"\t"+rows[2].Count)
+                .diameter(200)
+                .value((rows[2].Count/total)*100)
+                .render();
+        var rp4 = radialProgress(document.getElementById('div4'))
+		        .label(rows[3].Leader+"\t"+rows[3].Count)
+		        .diameter(200)
+		        .value((rows[3].Count/total)*100)
+		        .render();
+        var rp5 = radialProgress(document.getElementById('div5'))
+		        .label(rows[4].Leader+"\t"+rows[4].Count)
+		        .diameter(200)
+		        .value((rows[4].Count/total)*100)
+		        .render();
+        var rp6 = radialProgress(document.getElementById('div6'))
+		        .label(rows[5].Leader+"\t"+rows[5].Count)
+		        .diameter(200)
+		        .value((rows[5].Count/total)*100)
+		        .render();
+        var rp7 = radialProgress(document.getElementById('div7'))
+        		.label(rows[6].Leader+"\t"+rows[6].Count)
+       			.diameter(200)
+        		.value((rows[6].Count/total)*100)
+        		.render();
+        var rp8 = radialProgress(document.getElementById('div8'))
+        		.label(rows[7].Leader+"\t"+rows[7].Count)
+        		.diameter(200)
+        		.value((rows[7].Count/total)*100)
+        		.render();
+    });
+</script>
+
+</body>
+</html>

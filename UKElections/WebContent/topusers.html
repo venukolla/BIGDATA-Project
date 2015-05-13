@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Top Users</title>
+  <meta charset="utf-8">
+  
+  <style>
+body {
+	background: url('images/ukkkkk.jpg') no-repeat center center fixed;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	margin: 0;
+	padding: 0;
+}
+</style>
+
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,200italic,600italic&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
+
+  <script src="http://phuonghuynh.github.io/js/bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/d3/d3.min.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/d3-transform/src/d3-transform.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/extarray.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/misc.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/cafej/src/micro-observer.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/microplugin/src/microplugin.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/bubble-chart.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/plugins/central-click/central-click.js"></script>
+  <script src="http://phuonghuynh.github.io/js/bower_components/bubble-chart/src/plugins/lines/lines.js"></script>
+  
+  <script type="text/javascript">
+  $(document).ready(function () {
+	  var diameter = 600, //max size of the bubbles
+	    color    = d3.scale.category20b(); //color category
+
+	var bubble = d3.layout.pack()
+	    .sort(null)
+	    .size([diameter, diameter])
+	    .padding(1.5);
+
+	var svg = d3.select("body")
+	    .append("svg")
+	    .attr("width", diameter)
+	    .attr("height", diameter)
+	    .attr("class", "bubble");
+
+	d3.csv("csv/topusers.csv", function(error, data){
+
+	    //convert numerical values from strings to numbers
+	    data = data.map(function(d){ d.value = +d["Count"]; return d; });
+
+	    //bubbles needs very specific format, convert data to this.
+	    var nodes = bubble.nodes({children:data}).filter(function(d) { return !d.children; });
+
+	    //setup the chart
+	    var bubbles = svg.append("g")
+	        .attr("transform", "translate(0,0)")
+	        .selectAll(".bubble")
+	        .data(nodes)
+	        .enter();
+
+	    //create the bubbles
+	    bubbles.append("circle")
+	        .attr("r", function(d){ return d.r; })
+	        .attr("cx", function(d){ return d.x; })
+	        .attr("cy", function(d){ return d.y; })
+	        .style("fill", function(d) { return color(d.value); });
+
+	    //format the text for each bubble
+	    bubbles.append("text")
+	        .attr("x", function(d){ return d.x; })
+	        .attr("y", function(d){ return d.y + 5; })
+	        .attr("text-anchor", "middle")
+	        .text(function(d){ return d["User"]; })
+	        .style({
+	            "fill":"white", 
+	            "font-family":"Helvetica Neue, Helvetica, Arial, san-serif",
+	            "font-size": "12px"
+	        });
+	})
+	});
+  
+  </script>
+  <style>
+    .bubbleChart {
+      min-width: 100px;
+      max-width: 700px;
+      height: 700px;
+      margin: 0 auto;
+    }
+    .bubbleChart svg{
+    
+    }
+    .bubble {
+       padding-left: 27%;
+    }
+  </style>
+</head>
+<body>
+<div class="header">
+		<table>
+			<tr>
+				<h1 align="center" style="font-size: 40">
+					
+						<font face="Agency FB" color="#06041A" size="30">UK Elections-2015</font>
+					
+					<marquee  >
+						<a href ="https://www.conservatives.com/" ><img src=images/conservatie.jpeg width="100" height="100"></a> 
+						<a href ="http://www.mydup.com/" ><img src=images/DUP.jpg width="100" height="100"></a>
+						<a href ="https://www.greenparty.org.uk/" ><img src=images/greenparty.jpg width="100" height="100"></a>
+						<a href ="http://www.sinnfein.ie/" ><img src=images/SFein.png width="100" height="100"></a>
+						<a href ="http://www.ukip.org/" ><img src=images/uklabor.jpg width="100" height="100"></a>
+						<a href ="http://www.snp.org/" ><img src=images/snp.jpg width="100" height="100"></a>
+						<a href ="http://www.ukip.org/" ><img src=images/ukip.png width="100" height="100"></a>
+						<a href ="http://www.libdems.org.uk/" ><img src=images/ldemocrats.jpg width="100" height="100"></a>
+					</marquee>
+				</h1>
+			</tr>
+		</table>
+	</div>
+	<div class="container">
+		<div class="row">
+			<table>
+				<tr>
+					<td align="center"><a href="opinionpoll.html"><img src="images/opinion-poll.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="topleader.html"><img src="images/partyleader.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="placestrength.html"><img src="images/placeimage.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="topusers.html"><img src="images/topusers.png" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="countrystrength.html"><img src="images/country.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="langstrength.html"><img src="images/Language.jpg" id="test" width="200" height="175" /></a></td>
+					<td align="center"><a href="index.jsp"><img src="images/refresh.jpg" id="test" width="200" height="175" /></a></td>
+					</tr>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
